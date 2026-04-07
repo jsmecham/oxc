@@ -40,7 +40,6 @@ mod multi_index_vec;
 mod node;
 mod scoping;
 mod stats;
-#[cfg(feature = "enum_eval")]
 pub mod ts_enum;
 mod unresolved_stack;
 

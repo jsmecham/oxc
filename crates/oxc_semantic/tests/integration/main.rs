@@ -2,7 +2,6 @@
 
 pub mod cfg;
 pub mod classes;
-#[cfg(feature = "enum_eval")]
 pub mod enum_values;
 pub mod modules;
 pub mod scopes;

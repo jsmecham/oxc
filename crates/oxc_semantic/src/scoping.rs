@@ -6,7 +6,6 @@ use self_cell::self_cell;
 use oxc_allocator::{Allocator, CloneIn, Vec as ArenaVec};
 use oxc_index::IndexVec;
 use oxc_span::{ArenaIdentHashMap, Ident, Span};
-#[cfg(feature = "enum_eval")]
 use oxc_syntax::constant_value::ConstantValue;
 use oxc_syntax::{
     node::NodeId,
@@ -81,7 +80,6 @@ multi_index_vec! {
 ///
 /// ## Scope Tree
 ///
-#[cfg(feature = "enum_eval")]
 use crate::ts_enum::EnumData;
 
 /// The scope tree stores lexical scopes created by a program, and all the
@@ -100,7 +98,6 @@ pub struct Scoping {
     pub(crate) no_side_effects: FxHashSet<SymbolId>,
 
     /// Pre-computed enum member values and scope mappings.
-    #[cfg(feature = "enum_eval")]
     pub(crate) enum_data: EnumData,
 
     /* Scope Tree - single allocation for all scope-indexed flat fields */
@@ -121,7 +118,6 @@ impl Default for Scoping {
             symbol_table: SymbolTable::new(),
             references: IndexVec::new(),
             no_side_effects: FxHashSet::default(),
-            #[cfg(feature = "enum_eval")]
             enum_data: EnumData::default(),
             scope_table: ScopeTable::new(),
             cell: ScopingCell::new(Allocator::default(), |allocator| ScopingInner {
@@ -602,27 +598,23 @@ impl Scoping {
     }
 
     /// Get the computed constant value for an enum member symbol.
-    #[cfg(feature = "enum_eval")]
     pub fn get_enum_member_value(&self, symbol_id: SymbolId) -> Option<&ConstantValue> {
         self.enum_data.get_member_value(symbol_id)
     }
 
     /// Set a computed constant value for an enum member symbol.
-    #[cfg(feature = "enum_eval")]
     pub(crate) fn set_enum_member_value(&mut self, symbol_id: SymbolId, value: ConstantValue) {
         self.enum_data.set_member_value(symbol_id, value);
     }
 
     /// Get the body scopes for an enum declaration symbol.
     /// Returns multiple scopes for merged enum declarations.
-    #[cfg(feature = "enum_eval")]
     pub fn get_enum_body_scopes(&self, symbol_id: SymbolId) -> Option<&[ScopeId]> {
         self.enum_data.get_body_scopes(symbol_id)
     }
 
     /// Add a body scope for an enum declaration symbol.
     /// Appends to the list (supports merged enum declarations).
-    #[cfg(feature = "enum_eval")]
     pub(crate) fn add_enum_body_scope(&mut self, symbol_id: SymbolId, scope_id: ScopeId) {
         self.enum_data.add_body_scope(symbol_id, scope_id);
     }
@@ -955,7 +947,6 @@ impl Scoping {
             symbol_table: self.symbol_table.clone(),
             references: self.references.clone(),
             no_side_effects: self.no_side_effects.clone(),
-            #[cfg(feature = "enum_eval")]
             enum_data: self.enum_data.clone(),
             scope_table: self.scope_table.clone(),
             cell: {

@@ -29,7 +29,7 @@ oxc_ecmascript = { workspace = true }
 oxc_index = { workspace = true }
 oxc_jsdoc = { workspace = true, optional = true }
 oxc_span = { workspace = true }
-oxc_syntax = { workspace = true }
+oxc_syntax = { workspace = true, features = ["to_js_string"] }
 
 itertools = { workspace = true }
 memchr = { workspace = true }
@@ -45,7 +45,6 @@ serde_json = { workspace = true }
 [features]
 default = []
 cfg = ["dep:oxc_cfg"]
-enum_eval = ["oxc_syntax/to_js_string"]
 jsdoc = ["dep:oxc_jsdoc"]
 linter = ["jsdoc"]
 serialize = ["oxc_span/serialize", "oxc_syntax/serialize"]
